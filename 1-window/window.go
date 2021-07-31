@@ -1,0 +1,54 @@
+package main
+
+import (
+	log "github.com/sirupsen/logrus"
+	"github.com/veandco/go-sdl2/sdl"
+)
+
+const WindowWidth = 1280
+const WindowHeight = 720
+
+func main() {
+
+	// Initialize SDL components
+	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
+		log.Fatal("error initializing ", err)
+	}
+
+	// Create window
+	window, err := sdl.CreateWindow("Pong", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
+		int32(WindowWidth), int32(WindowHeight), sdl.WINDOW_SHOWN)
+	if err != nil {
+		log.Fatal("error creating window ", err)
+	}
+
+	//Create renderer
+	renderer, err := sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
+	if err != nil {
+		log.Fatal("error creating renderer ", err)
+	}
+
+	// Color the window
+	if err := renderer.SetDrawColor(0x0, 0x0, 0x0, 0xFF); err != nil {
+		return
+	}
+	renderer.Clear()
+
+	//todo Draw net
+
+	renderer.Present()
+
+	//Clean up
+	defer window.Destroy()
+	defer renderer.Destroy()
+
+	// Game Loop
+	for {
+		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+			switch event.(type) {
+			case *sdl.QuitEvent:
+				return
+			}
+		}
+	}
+}
